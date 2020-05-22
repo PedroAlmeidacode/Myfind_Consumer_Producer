@@ -1,0 +1,3 @@
+/home/pedro/Desktop/Myfind_ConsumidorProdutor/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/pedro/Desktop/Myfind_ConsumidorProdutor/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/pedro/Desktop/Myfind_ConsumidorProdutor/cmake-build-debug/CMakeFiles/Myfind_ConsumidorProdutor.dir

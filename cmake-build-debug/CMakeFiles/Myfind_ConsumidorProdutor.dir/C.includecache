@@ -1,0 +1,40 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/pedro/Desktop/Myfind_ConsumidorProdutor/library.h
+pthread.h
+-
+stdio.h
+-
+stdlib.h
+-
+unistd.h
+-
+semaphore.h
+-
+stdbool.h
+-
+time.h
+-
+string.h
+-
+ctype.h
+-
+dirent.h
+-
+errno.h
+-
+sys/types.h
+-
+sys/stat.h
+-
+
+/home/pedro/Desktop/Myfind_ConsumidorProdutor/main.c
+library.h
+/home/pedro/Desktop/Myfind_ConsumidorProdutor/library.h
+

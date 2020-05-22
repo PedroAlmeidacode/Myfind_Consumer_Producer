@@ -1,0 +1,1 @@
+/usr/bin/cc -g   CMakeFiles/Myfind_ConsumidorProdutor.dir/main.c.o CMakeFiles/Myfind_ConsumidorProdutor.dir/lib_util.c.o  -o Myfind_ConsumidorProdutor  -lpthread 
