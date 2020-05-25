@@ -43,10 +43,10 @@ RM = /snap/clion/112/bin/cmake/linux/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/pedro/Desktop/Myfind_ConsumidorProdutor
+CMAKE_SOURCE_DIR = /home/pedro/Desktop/Myfind_Consumer_Producer
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/pedro/Desktop/Myfind_ConsumidorProdutor/cmake-build-debug
+CMAKE_BINARY_DIR = /home/pedro/Desktop/Myfind_Consumer_Producer/cmake-build-debug
 
 # Include any dependencies generated for this target.
 include CMakeFiles/Myfind_ConsumidorProdutor.dir/depend.make
@@ -59,29 +59,29 @@ include CMakeFiles/Myfind_ConsumidorProdutor.dir/flags.make
 
 CMakeFiles/Myfind_ConsumidorProdutor.dir/main.c.o: CMakeFiles/Myfind_ConsumidorProdutor.dir/flags.make
 CMakeFiles/Myfind_ConsumidorProdutor.dir/main.c.o: ../main.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pedro/Desktop/Myfind_ConsumidorProdutor/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/Myfind_ConsumidorProdutor.dir/main.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/Myfind_ConsumidorProdutor.dir/main.c.o   -c /home/pedro/Desktop/Myfind_ConsumidorProdutor/main.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pedro/Desktop/Myfind_Consumer_Producer/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/Myfind_ConsumidorProdutor.dir/main.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/Myfind_ConsumidorProdutor.dir/main.c.o   -c /home/pedro/Desktop/Myfind_Consumer_Producer/main.c
 
 CMakeFiles/Myfind_ConsumidorProdutor.dir/main.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/Myfind_ConsumidorProdutor.dir/main.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/pedro/Desktop/Myfind_ConsumidorProdutor/main.c > CMakeFiles/Myfind_ConsumidorProdutor.dir/main.c.i
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/pedro/Desktop/Myfind_Consumer_Producer/main.c > CMakeFiles/Myfind_ConsumidorProdutor.dir/main.c.i
 
 CMakeFiles/Myfind_ConsumidorProdutor.dir/main.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/Myfind_ConsumidorProdutor.dir/main.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/pedro/Desktop/Myfind_ConsumidorProdutor/main.c -o CMakeFiles/Myfind_ConsumidorProdutor.dir/main.c.s
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/pedro/Desktop/Myfind_Consumer_Producer/main.c -o CMakeFiles/Myfind_ConsumidorProdutor.dir/main.c.s
 
 CMakeFiles/Myfind_ConsumidorProdutor.dir/lib_util.c.o: CMakeFiles/Myfind_ConsumidorProdutor.dir/flags.make
 CMakeFiles/Myfind_ConsumidorProdutor.dir/lib_util.c.o: ../lib_util.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pedro/Desktop/Myfind_ConsumidorProdutor/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/Myfind_ConsumidorProdutor.dir/lib_util.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/Myfind_ConsumidorProdutor.dir/lib_util.c.o   -c /home/pedro/Desktop/Myfind_ConsumidorProdutor/lib_util.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pedro/Desktop/Myfind_Consumer_Producer/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/Myfind_ConsumidorProdutor.dir/lib_util.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/Myfind_ConsumidorProdutor.dir/lib_util.c.o   -c /home/pedro/Desktop/Myfind_Consumer_Producer/lib_util.c
 
 CMakeFiles/Myfind_ConsumidorProdutor.dir/lib_util.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/Myfind_ConsumidorProdutor.dir/lib_util.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/pedro/Desktop/Myfind_ConsumidorProdutor/lib_util.c > CMakeFiles/Myfind_ConsumidorProdutor.dir/lib_util.c.i
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/pedro/Desktop/Myfind_Consumer_Producer/lib_util.c > CMakeFiles/Myfind_ConsumidorProdutor.dir/lib_util.c.i
 
 CMakeFiles/Myfind_ConsumidorProdutor.dir/lib_util.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/Myfind_ConsumidorProdutor.dir/lib_util.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/pedro/Desktop/Myfind_ConsumidorProdutor/lib_util.c -o CMakeFiles/Myfind_ConsumidorProdutor.dir/lib_util.c.s
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/pedro/Desktop/Myfind_Consumer_Producer/lib_util.c -o CMakeFiles/Myfind_ConsumidorProdutor.dir/lib_util.c.s
 
 # Object files for target Myfind_ConsumidorProdutor
 Myfind_ConsumidorProdutor_OBJECTS = \
@@ -95,7 +95,7 @@ Myfind_ConsumidorProdutor: CMakeFiles/Myfind_ConsumidorProdutor.dir/main.c.o
 Myfind_ConsumidorProdutor: CMakeFiles/Myfind_ConsumidorProdutor.dir/lib_util.c.o
 Myfind_ConsumidorProdutor: CMakeFiles/Myfind_ConsumidorProdutor.dir/build.make
 Myfind_ConsumidorProdutor: CMakeFiles/Myfind_ConsumidorProdutor.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/pedro/Desktop/Myfind_ConsumidorProdutor/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking C executable Myfind_ConsumidorProdutor"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/pedro/Desktop/Myfind_Consumer_Producer/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking C executable Myfind_ConsumidorProdutor"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/Myfind_ConsumidorProdutor.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -108,6 +108,6 @@ CMakeFiles/Myfind_ConsumidorProdutor.dir/clean:
 .PHONY : CMakeFiles/Myfind_ConsumidorProdutor.dir/clean
 
 CMakeFiles/Myfind_ConsumidorProdutor.dir/depend:
-	cd /home/pedro/Desktop/Myfind_ConsumidorProdutor/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/pedro/Desktop/Myfind_ConsumidorProdutor /home/pedro/Desktop/Myfind_ConsumidorProdutor /home/pedro/Desktop/Myfind_ConsumidorProdutor/cmake-build-debug /home/pedro/Desktop/Myfind_ConsumidorProdutor/cmake-build-debug /home/pedro/Desktop/Myfind_ConsumidorProdutor/cmake-build-debug/CMakeFiles/Myfind_ConsumidorProdutor.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/pedro/Desktop/Myfind_Consumer_Producer/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/pedro/Desktop/Myfind_Consumer_Producer /home/pedro/Desktop/Myfind_Consumer_Producer /home/pedro/Desktop/Myfind_Consumer_Producer/cmake-build-debug /home/pedro/Desktop/Myfind_Consumer_Producer/cmake-build-debug /home/pedro/Desktop/Myfind_Consumer_Producer/cmake-build-debug/CMakeFiles/Myfind_ConsumidorProdutor.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/Myfind_ConsumidorProdutor.dir/depend
 

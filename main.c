@@ -7,7 +7,7 @@ pthread_mutex_t trinco_p = PTHREAD_MUTEX_INITIALIZER; // trinco produtor
 pthread_mutex_t trinco_c = PTHREAD_MUTEX_INITIALIZER; // trinco consumidor
 pthread_mutex_t trinco = PTHREAD_MUTEX_INITIALIZER; // trinco de matches
 
-DATA data[NProds];
+DATA data[NProds]; //struct de data para cada um dos produtores
 THREADS *head = NULL; // vai guardar a primeria posicao da linked list threads
 int n_threads = 0; // variavel global que guarda o numero de struct thread criadas (nao o numero de threads lancadas)
 
@@ -182,12 +182,14 @@ void *consumidor() {
         sem_wait(&semPodeCons);             // espera por ser sinalizado para poder consumir
         pthread_mutex_lock(&trinco_c);      // aguarda o lock da regiao critica
 
-        char *path_of_search = malloc(300);
-        ARGS args[10];
+        char *path_of_search = malloc(300); // aloca espaco para path a consumir
+        ARGS args[10];                      // aloca espaco para os argumentos localmente
 
 
-        strcpy(path_of_search, data[consptr].path);
+        strcpy(path_of_search, data[consptr].path); // copia o path para local da estrtura global dentro de locks
+        data[consptr].path = NULL;                  // coloca a NULL o path consumido
         int n_args = data[consptr].n_args;
+        // copia os argumentos globais para locais
         for (int i = 0; i < data[consptr].n_args; i++) {
             args[i].opt = data[consptr].args[i].opt;
             args[i].value = data[consptr].args[i].value;
@@ -219,38 +221,52 @@ void print_matches(THREADS *threads) {
 
 
 int main(int argc, char *argv[]) {
-    //nesta funcao prodptr = 0
+    //nesta funcao prodptr comeca a 0
 
-    pthread_t thread_id[NCons + NProds];
+    pthread_t thread_producer_id[NProds]; // thread ids dos produtores (1)
+    pthread_t thread_consumer_id[NProds]; // thread ids dos consumidores
 
-    parse_args(argc, argv,
-               &data[prodptr]); // faz o parse dos argumentos recebidos do terminal e coloca os dentro da estrtura
+    // movemos a informacao para a primeira posicao do array de structs data
+    parse_args(argc, argv, &data[prodptr]); // faz o parse dos argumentos recebidos do terminal e coloca os dentro da estrtura
     if (data[prodptr].n_args > 0) {
+        // copiamos a informacao passada por argumento da primeira struct do array para as outras structs
         for (int j = 1; j < NCons; j++) {
             data[j].args->opt = data[prodptr].args->opt;
             data[j].args->value = data[prodptr].args->value;
             data[j].n_args = data[prodptr].n_args;
         }
     }
-
+    // inicicializamos o semaforo com um produtor e N consumidores
     sem_init(&semPodeProd, 0, N); // posicoes que o consumidor pode consumir
     sem_init(&semPodeCons, 0, 0);
 
-
+    // criacao de thread produtora
     for (int i = 0; i < NProds; i++) {
-        pthread_create(&thread_id[i], NULL, &produtor, (void *) data[prodptr].path);
+        pthread_create(&thread_producer_id[i], NULL, &produtor, (void *) data[prodptr].path);
     }
-
+    // criacao de threads consumidoras
     for (int i = 1; i < NCons + 1; i++) {
-        pthread_create(&thread_id[i + 1], NULL, &consumidor, NULL);
+        pthread_create(&thread_consumer_id[i], NULL, &consumidor, NULL);
     }
-    pthread_join(thread_id[0],NULL); // espera que thread produtora acabe a recursividade
+    // faz join da thread consumidora
+    pthread_join(thread_producer_id[0],NULL); // espera que thread produtora acabe a recursividade
+    // depois da thread produtora ter terminado fica a espera que todas as threads consumidoras consumam
+    while (1){
+        int n_producers_waitting = 0;
+        for (int k = 0; k < NProds ; k++) {
 
-    // se as posicoes do array estao todas consumidas
-    // fazer pthread detach das threads consumidoras
-
-    print_matches(head);
-
-
-    return 0;
+            if (data[k].path == NULL){
+                n_producers_waitting++;
+            }
+            // se todas as threads consumidoras ewstiverem presas a espera de receber algo para consumir,
+            // que nunca vai existir visto que a thread produtora ja terminou
+            if (n_producers_waitting == NProds){
+                for (int i = 0; i < NCons ; i++) {
+                    pthread_detach(thread_consumer_id[i]); // faz detach das threads
+                }
+                print_matches(head); // imprime os matches
+                return 0;
+            }
+        }
+    }
 }

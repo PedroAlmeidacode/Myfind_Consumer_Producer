@@ -4,8 +4,8 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
-  "/home/pedro/Desktop/Myfind_ConsumidorProdutor/lib_util.c" "/home/pedro/Desktop/Myfind_ConsumidorProdutor/cmake-build-debug/CMakeFiles/Myfind_ConsumidorProdutor.dir/lib_util.c.o"
-  "/home/pedro/Desktop/Myfind_ConsumidorProdutor/main.c" "/home/pedro/Desktop/Myfind_ConsumidorProdutor/cmake-build-debug/CMakeFiles/Myfind_ConsumidorProdutor.dir/main.c.o"
+  "/home/pedro/Desktop/Myfind_Consumer_Producer/lib_util.c" "/home/pedro/Desktop/Myfind_Consumer_Producer/cmake-build-debug/CMakeFiles/Myfind_ConsumidorProdutor.dir/lib_util.c.o"
+  "/home/pedro/Desktop/Myfind_Consumer_Producer/main.c" "/home/pedro/Desktop/Myfind_Consumer_Producer/cmake-build-debug/CMakeFiles/Myfind_ConsumidorProdutor.dir/main.c.o"
   )
 set(CMAKE_C_COMPILER_ID "GNU")
 

@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/home/pedro/Desktop/Myfind_ConsumidorProdutor/library.h
+/home/pedro/Desktop/Myfind_Consumer_Producer/library.h
 pthread.h
 -
 stdio.h
@@ -34,7 +34,7 @@ sys/types.h
 sys/stat.h
 -
 
-/home/pedro/Desktop/Myfind_ConsumidorProdutor/main.c
+/home/pedro/Desktop/Myfind_Consumer_Producer/main.c
 library.h
-/home/pedro/Desktop/Myfind_ConsumidorProdutor/library.h
+/home/pedro/Desktop/Myfind_Consumer_Producer/library.h
 
