@@ -7,10 +7,9 @@ pthread_mutex_t trinco_p = PTHREAD_MUTEX_INITIALIZER; // trinco produtor
 pthread_mutex_t trinco_c = PTHREAD_MUTEX_INITIALIZER; // trinco consumidor
 pthread_mutex_t trinco = PTHREAD_MUTEX_INITIALIZER; // trinco de matches
 
-DATA data[NProds]; //struct de data para cada um dos produtores
+DATA data[N]; //struct de data com N poisicoes onde pode ser produzido e consumido
 THREADS *head = NULL; // vai guardar a primeria posicao da linked list threads
 int n_threads = 0; // variavel global que guarda o numero de struct thread criadas (nao o numero de threads lancadas)
-
 sem_t semPodeCons, semPodeProd;
 
 // main tenta perceber se nenhum deles esta a consumir e estao todos a espera de recenber , se o produtor ja tivwer termiando faz pthread_detach de todos os threads consumidores
@@ -59,7 +58,7 @@ MATCHES *create_new_match_in_thread(MATCHES *current_match, char *new_path) {
 }
 
 //consome tudo dentro deste path (directorio)
-void consome(char * path_of_search, ARGS args[10], int n_args){
+void consome(char *path_of_search, ARGS args[10], int n_args) {
     int j;
 
     struct threads *newThread = NULL; //para o caso da thread ainda nao existir se ja existir procuro o coloco nesta variavel
@@ -97,7 +96,8 @@ void consome(char * path_of_search, ARGS args[10], int n_args){
                     }
                 }
                 // Match
-                if (j == n_args) { // se todas as funcoes passarem nos testes j sera igual ao numero de argumentos definidos
+                if (j ==
+                    n_args) { // se todas as funcoes passarem nos testes j sera igual ao numero de argumentos definidos
                     if (n_matches == 0) {
 
                         // retorna a struct existente se ela existir, cria strcuct match se ela nao existir
@@ -121,14 +121,25 @@ void consome(char * path_of_search, ARGS args[10], int n_args){
     }
 }
 
+void produce_new_path_to_consume(char * new_path){
+    sem_wait(&semPodeProd);            // espera que o semaforo baixe para poder produzir
+    pthread_mutex_lock(&trinco_p);        // apanha o lock para entrar na regiao critica
+    data[prodptr].path = malloc(300);
+    strcpy(data[prodptr].path, new_path);
+    prodptr = (prodptr + 1) % N;            //atualiuza o prodptr para a proxima posicao
+    pthread_mutex_unlock(&trinco_p);    // liberta o lock para outros produtores
+    sem_post(&semPodeCons);            // aumenta o semaforo de produtores
+
+}
+
 void *produtor(void *param) {
 
     char *path_to_explore = (char *) param;
 
-
     // retiro o path a procurar nesta thread
     char *path_of_search = malloc(300); // 300 for the record
     strcpy(path_of_search, path_to_explore);
+
 
     DIR *dir;
     struct dirent *entry;
@@ -157,15 +168,7 @@ void *produtor(void *param) {
                 //printf("new path = %s\n",new_path);
                 // se for directorio cria outro thread para o explorar
                 if (isDirectory(new_path)) {
-
-                    sem_wait(&semPodeProd);            // espera que o semaforo baixe para poder produzir
-                    pthread_mutex_lock(&trinco_p);        // apanha o lock para entrar na regiao critica
-                    data[prodptr].path = malloc(300);
-                    strcpy(data[prodptr].path, new_path);
-                    prodptr = (prodptr + 1) % N;            //atualiuza o prodptr para a proxima posicao
-                    pthread_mutex_unlock(&trinco_p);    // liberta o lock para outros produtores
-                    sem_post(&semPodeCons);            // aumenta o semaforo de produtores
-
+                    produce_new_path_to_consume(new_path); // adiciona ao array global uma nova estrtura para consumir e atualiza as variaveis
                     produtor(new_path);
                 }
             }
@@ -198,7 +201,7 @@ void *consumidor() {
         pthread_mutex_unlock(&trinco_c);    // liberta o lock para outras threads consumidoras entrarem na regiao critica
         sem_post(&semPodeProd);             // aumenta o semaforo de consumidores
 
-        consome(path_of_search,args,n_args); // explora os ficheiro dentro de path_pf_search e encontra matches
+        consome(path_of_search, args, n_args); // explora os ficheiro dentro de path_pf_search e encontra matches
     }
 }
 
@@ -206,7 +209,6 @@ void print_matches(THREADS *threads) {
     if (threads == NULL) {
         printf("\tNao existem resultados para a sua pesquisa\n");
     } else {
-        printf("Result : \n");
         THREADS *tmp = threads; // tmp fica com a primeria thrad inicializada
         for (int i = 0; i < n_threads; i++) {
             MATCHES *mat = tmp->matches; // tmp fica com a primeria thrad inicializada
@@ -227,10 +229,10 @@ int main(int argc, char *argv[]) {
     pthread_t thread_consumer_id[NProds]; // thread ids dos consumidores
 
     // movemos a informacao para a primeira posicao do array de structs data
-    parse_args(argc, argv, &data[prodptr]); // faz o parse dos argumentos recebidos do terminal e coloca os dentro da estrtura
+    parse_args(argc, argv,&data[prodptr]); // faz o parse dos argumentos recebidos do terminal e coloca os dentro da estrtura
     if (data[prodptr].n_args > 0) {
         // copiamos a informacao passada por argumento da primeira struct do array para as outras structs
-        for (int j = 1; j < NCons; j++) {
+        for (int j = 1; j < N; j++) {
             data[j].args->opt = data[prodptr].args->opt;
             data[j].args->value = data[prodptr].args->value;
             data[j].n_args = data[prodptr].n_args;
@@ -240,33 +242,44 @@ int main(int argc, char *argv[]) {
     sem_init(&semPodeProd, 0, N); // posicoes que o consumidor pode consumir
     sem_init(&semPodeCons, 0, 0);
 
+
+    char * base_path = malloc(300);
+    strcpy(base_path,data[prodptr].path);
+
     // criacao de thread produtora
     for (int i = 0; i < NProds; i++) {
         pthread_create(&thread_producer_id[i], NULL, &produtor, (void *) data[prodptr].path);
     }
+
     // criacao de threads consumidoras
     for (int i = 1; i < NCons + 1; i++) {
         pthread_create(&thread_consumer_id[i], NULL, &consumidor, NULL);
     }
-    // faz join da thread consumidora
-    pthread_join(thread_producer_id[0],NULL); // espera que thread produtora acabe a recursividade
-    // depois da thread produtora ter terminado fica a espera que todas as threads consumidoras consumam
-    while (1){
-        int n_producers_waitting = 0;
-        for (int k = 0; k < NProds ; k++) {
 
-            if (data[k].path == NULL){
-                n_producers_waitting++;
-            }
-            // se todas as threads consumidoras ewstiverem presas a espera de receber algo para consumir,
-            // que nunca vai existir visto que a thread produtora ja terminou
-            if (n_producers_waitting == NProds){
-                for (int i = 0; i < NCons ; i++) {
-                    pthread_detach(thread_consumer_id[i]); // faz detach das threads
-                }
-                print_matches(head); // imprime os matches
-                return 0;
+    // o base path sera consumido e nao so os ficheiros incluidos no mesmo
+    if (isDirectory(base_path)) {
+        produce_new_path_to_consume(base_path);
+    }
+
+    // faz join da thread consumidora
+    pthread_join(thread_producer_id[0], NULL); // espera que thread produtora acabe a recursividade
+    // depois da thread produtora ter terminado fica a espera que todas as threads consumidoras consumam
+    while (1) {
+        int n_consumers_waitting = 0;
+        for (int k = 0; k < NCons; k++) {
+            if (data[k].path == NULL) {
+                n_consumers_waitting++;
             }
         }
+        // se todas as threads consumidoras ewstiverem presas a espera de receber algo para consumir,
+        // que nunca vai existir visto que a thread produtora ja terminou
+        if (n_consumers_waitting == NCons) {
+            for (int i = 0; i < NCons; i++) {
+                pthread_detach(thread_consumer_id[i]); // faz detach das threads
+            }
+            print_matches(head); // imprime os matches
+            exit(EXIT_SUCCESS); // exit from main thread
+        }
     }
+
 }
