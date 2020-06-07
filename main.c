@@ -58,7 +58,7 @@ MATCHES *create_new_match_in_thread(MATCHES *current_match, char *new_path) {
 }
 
 //consome tudo dentro deste path (directorio)
-void consome(char *path_of_search, ARGS args[10], int n_args) {
+void consome(char *path_of_search, DATA this_data) {
     int j;
 
     struct threads *newThread = NULL; //para o caso da thread ainda nao existir se ja existir procuro o coloco nesta variavel
@@ -90,14 +90,13 @@ void consome(char *path_of_search, ARGS args[10], int n_args) {
                 }
 
                 //chama as funcoes de possivel match de acordo com os argumentos definidos
-                for (j = 0; j < n_args; j++) {
-                    if (!args[j].opt(args[j].value, new_path, name_of_file)) {
+                for (j = 0; j < this_data.n_args; j++) {
+                    if (!this_data.args[j].opt(this_data.args[j].value, new_path, name_of_file)) {
                         break;
                     }
                 }
                 // Match
-                if (j ==
-                    n_args) { // se todas as funcoes passarem nos testes j sera igual ao numero de argumentos definidos
+                 if (j == this_data.n_args) { // se todas as funcoes passarem nos testes j sera igual ao numero de argumentos definidos
                     if (n_matches == 0) {
 
                         // retorna a struct existente se ela existir, cria strcuct match se ela nao existir
@@ -179,33 +178,23 @@ void *produtor(void *param) {
 }
 
 
-
 void *consumidor() {
     while (1) {
         sem_wait(&semPodeCons);             // espera por ser sinalizado para poder consumir
-        pthread_mutex_lock(&trinco_c);      // aguarda o lock da regiao critica
-
-        char *path_of_search = malloc(300); // aloca espaco para path a consumir
-        ARGS args[10];                      // aloca espaco para os argumentos localmente
-
-
-        strcpy(path_of_search, data[consptr].path); // copia o path para local da estrtura global dentro de locks
-        data[consptr].path = NULL;                  // coloca a NULL o path consumido
-        int n_args = data[consptr].n_args;
-        // copia os argumentos globais para locais
-        for (int i = 0; i < data[consptr].n_args; i++) {
-            args[i].opt = data[consptr].args[i].opt;
-            args[i].value = data[consptr].args[i].value;
-        }
-        consptr = (consptr + 1) % N;        // coloca o consptr para a proxima posicao, se for a ultima posicap passa para a primeira devido ao %N
-        pthread_mutex_unlock(&trinco_c);    // liberta o lock para outras threads consumidoras entrarem na regiao critica
+            pthread_mutex_lock(&trinco_c);      // aguarda o lock da regiao critica
+                char *path_of_search = malloc(300); // aloca espaco para path a consumir
+                int n = consptr;
+                strcpy(path_of_search, data[consptr].path); // copia o path para local da estrtura global dentro de locks
+                data[consptr].path = NULL;                  // coloca a NULL o path consumido
+                consptr = (consptr + 1) % N;        // coloca o consptr para a proxima posicao, se for a ultima posicap passa para a primeira devido ao %N
+            pthread_mutex_unlock(&trinco_c);    // liberta o lock para outras threads consumidoras entrarem na regiao critica
         sem_post(&semPodeProd);             // aumenta o semaforo de consumidores
 
-        consome(path_of_search, args, n_args); // explora os ficheiro dentro de path_pf_search e encontra matches
+        consome(path_of_search, data[n]); // explora os ficheiro dentro de path_pf_search e encontra matches
     }
 }
 
-void print_matches(THREADS *threads) {
+void print_matches(THREADS *threads, char * base_path) {
     if (threads == NULL) {
         printf("\tNao existem resultados para a sua pesquisa\n");
     } else {
@@ -213,7 +202,8 @@ void print_matches(THREADS *threads) {
         for (int i = 0; i < n_threads; i++) {
             MATCHES *mat = tmp->matches; // tmp fica com a primeria thrad inicializada
             for (int j = 0; j < tmp->n_matches; j++) {
-                printf("%s\n", mat->match);
+                char *str = strremove(mat->match,base_path); // remove o base_path do path completo para ficar mais bonito
+                printf(".%s\n", str);
                 mat = mat->next;
             }
             tmp = tmp->next; // tmp fica com a thread inicializada a seguir a mesma
@@ -233,8 +223,10 @@ int main(int argc, char *argv[]) {
     if (data[prodptr].n_args > 0) {
         // copiamos a informacao passada por argumento da primeira struct do array para as outras structs
         for (int j = 1; j < N; j++) {
-            data[j].args->opt = data[prodptr].args->opt;
-            data[j].args->value = data[prodptr].args->value;
+            for (int i = 0; i < data[prodptr].n_args ; i++){
+                data[j].args[i].opt = data[prodptr].args[i].opt;
+                data[j].args[i].value = data[prodptr].args[i].value;
+            }
             data[j].n_args = data[prodptr].n_args;
         }
     }
@@ -261,6 +253,13 @@ int main(int argc, char *argv[]) {
         produce_new_path_to_consume(base_path);
     }
 
+    // check if base path is match
+
+
+
+
+    
+
     // faz join da thread consumidora
     pthread_join(thread_producer_id[0], NULL); // espera que thread produtora acabe a recursividade
     // depois da thread produtora ter terminado fica a espera que todas as threads consumidoras consumam
@@ -277,7 +276,7 @@ int main(int argc, char *argv[]) {
             for (int i = 0; i < NCons; i++) {
                 pthread_detach(thread_consumer_id[i]); // faz detach das threads
             }
-            print_matches(head); // imprime os matches
+            print_matches(head,base_path); // imprime os matches
             exit(EXIT_SUCCESS); // exit from main thread
         }
     }

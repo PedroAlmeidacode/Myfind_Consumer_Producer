@@ -54,6 +54,6 @@ typedef struct matches {
     struct matches *next;
 } MATCHES;
 
-
+char *strremove(char *str, const char *sub);
 int isDirectory(const char *path);
 void parse_args(int argc, char *argv[], DATA *data);
